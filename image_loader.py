@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import numpy as np
 
 class ImageLoader:
@@ -16,12 +16,11 @@ class ImageLoader:
         """
         Charge l'image, la redimensionne et la convertit en tableau NumPy normalisé.
 
-        :return: Tableau NumPy de l'image prétraitée
+        :return: Tableau NumPy de l'image prétraitée, de forme (hauteur, largeur, 3), valeurs dans [0, 1]
         """
         try:
-            image = Image.open(self.image_path).convert('RGB')
-            image = image.resize(self.size)
-            image_array = np.array(image) / 255.0  # Normalisation
-            return image_array
-        except Exception as e:
-            raise ValueError(f"Erreur lors du chargement de l'image: {e}")
+            with Image.open(self.image_path) as image:
+                image = image.convert('RGB').resize(self.size)
+                return np.array(image) / 255.0  # Normalisation
+        except (OSError, UnidentifiedImageError) as e:
+            raise ValueError(f"Erreur lors du chargement de l'image: {e}") from e
