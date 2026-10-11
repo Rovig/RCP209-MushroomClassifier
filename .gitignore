@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+.venv/
+.idea/
+.DS_Store
+
+# Données et modèles générés
+*.joblib
+mushroom.csv
+agaricus-lepiota.data
